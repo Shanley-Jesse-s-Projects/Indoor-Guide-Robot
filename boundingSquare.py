@@ -6,20 +6,20 @@ import numpy as np
 from math import *
 
 
-# The purpose of this code is to be able to find the P2 value in front of the lidar, this was to be used in a bounding square
-#we changed this to a bounding circle after this initial version
+# The purpose of this code is to be able to find the local and global coordinates in relation to the location of the lidar on the robot that can then be passed into a 
+#higher level mapping function.
 
-# Make a function for point 1 from the initial lidar point
+# Make a function for point 1 from the initial lidar point for x
 def x(whole):
     for i in whole:
-        m = np.array(whole)
+        m = np.array(whole) #get all the values in one list
     B = m[0]
     C = m[1]
-    dx_1 = np.cos(C)
-    dx = np.dot(dx_1, B)
-    return dx
+    dx_1 = np.cos(C) #find the cosine of poisition 2 of the array
+    dx = np.dot(dx_1, B) #find the dot product
+    return dx #return the x location
 
-
+#Make a function for point 1 from the initial lidar point for y
 def y(whole):
     for i in whole:
         m = np.array(whole)
@@ -27,9 +27,9 @@ def y(whole):
     C = m[1]
     dy_1 = np.sin(C)
     dy = np.dot(dy_1, B)
-    return dy
+    return dy #return the y location
 
-
+#find the local point x
 def P_1x(dx, dy, whole):
     theta = 1.57
     ang = np.arctan(dy / dx)
@@ -38,7 +38,7 @@ def P_1x(dx, dy, whole):
     P_Px = np.dot(d_1, d_2)
     return P_Px
 
-
+#find the local point y
 def P_1y(dx, dy, whole):
     theta = 1.57
     ang = np.arctan(dy / dx)
@@ -48,14 +48,14 @@ def P_1y(dx, dy, whole):
     return P_Py
 
 
-# make a function to do the calculations
+# make a function to find x distance the point is away from the location of the lidar on the robot
 def lidar_mathx(dx, P_P, P_0, whole):
     p1 = P_P - P_0
     x_p_2 = dx + p1
     P_x2 = np.mean(x_p_2)
     return P_x2
 
-
+# make a function to find y distance the point is away from the location of the lidar on the robot
 def lidar_mathy(dy, P_P, P_0, whole):
     p1 = P_P - P_0
     p_y_2 = dy + p1
@@ -63,7 +63,7 @@ def lidar_mathy(dy, P_P, P_0, whole):
     P_y2 = np.mean(P_y2)
     return P_y2
 
-
+#find the global x point
 def x_global(whole, x_1, P_Py, P_Px, P_x2, P_y2):
     for i in whole:
         m = np.array(whole)
@@ -75,7 +75,7 @@ def x_global(whole, x_1, P_Py, P_Px, P_x2, P_y2):
     x_g2 = yes - no + x_1
     return x_g2
 
-
+#find the global y point
 def y_global(whole, y_1, P_Py, P_Px, P_x2, P_y2):
     for i in whole:
         m = np.array(whole)
